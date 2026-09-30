@@ -1,5 +1,4 @@
 import { formatRelativeTime, formatStamp } from '../domain/time';
-import { describeSource } from '../data/rates';
 import type { RateSnapshot } from '../data/normalize';
 import type { RatesStatus } from '../hooks/useExchangeRates';
 
@@ -39,7 +38,7 @@ export function RateStatusBar({
           aria-hidden="true"
         />
         <span className="statusbar__text">
-          {statusLabel(snapshot, status, isFromCache, failed)}
+          {renderStatusWithLink(snapshot, status, isFromCache, failed)}
         </span>
         {snapshot && (
           <span className="statusbar__time">
@@ -55,7 +54,7 @@ export function RateStatusBar({
         onClick={onRefresh}
         disabled={isBusy}
       >
-        {isBusy ? '갱신 중…' : '새로고침'}
+        {isBusy ? '갱신 중…' : '🔄 새로고침'}
       </button>
 
       {stale && error && (
@@ -68,12 +67,12 @@ export function RateStatusBar({
   );
 }
 
-function statusLabel(
+function renderStatusWithLink(
   snapshot: RateSnapshot | null,
   status: RatesStatus,
   isFromCache: boolean,
   failed: boolean,
-): string {
+) {
   if (status === 'loading') {
     return '환율 불러오는 중…';
   }
@@ -86,6 +85,37 @@ function statusLabel(
   if (!snapshot) {
     return '환율 없음';
   }
+
   const source = isFromCache ? 'cache' : snapshot.source;
-  return describeSource(source);
+  if (source === 'exchangerate-api') {
+    return (
+      <>
+        출처:{' '}
+        <a
+          href="https://www.exchangerate-api.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="statusbar__api-link"
+        >
+          ExchangeRate-API 🔗
+        </a>
+      </>
+    );
+  }
+  if (source === 'frankfurter') {
+    return (
+      <>
+        출처:{' '}
+        <a
+          href="https://www.frankfurter.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="statusbar__api-link"
+        >
+          ECB (Frankfurter API 🔗)
+        </a>
+      </>
+    );
+  }
+  return '저장된 환율';
 }

@@ -8,6 +8,7 @@ export default defineConfig({
   // 상대 경로를 써야 자산 URL 이 깨지지 않는다.
   base: './',
   server: {
+    host: true,
     port: 5173,
     open: true,
   },

@@ -15,20 +15,38 @@ export function ApiKeyPanel({ apiKey, envApiKey, onSave }: ApiKeyPanelProps) {
 
   return (
     <div className="settings">
-      <button
-        type="button"
-        className="settings__toggle"
-        onClick={() => setOpen((prev) => !prev)}
-        aria-expanded={open}
-      >
-        {open ? '설정 닫기' : 'API 설정'}
-      </button>
+      <div className="settings__toggle-group">
+        <a
+          href="https://www.exchangerate-api.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="api-link-badge"
+          title="ExchangeRate-API 공식 사이트로 이동 (무료 API 키 발급)"
+        >
+          🌐 ExchangeRate-API 🔗
+        </a>
+        <button
+          type="button"
+          className="settings__toggle"
+          onClick={() => setOpen((prev) => !prev)}
+          aria-expanded={open}
+        >
+          {open ? '설정 닫기' : '🔑 API 키 설정'}
+        </button>
+      </div>
 
       {open && (
         <div className="settings__body">
           <p className="settings__hint">
-            <strong>exchangerate-api</strong> 키를 넣으면 실시간 환율을 사용합니다.
-            비워 두면 키가 필요 없는 ECB 기준 환율(Frankfurter)로 자동 전환됩니다.
+            <strong>exchangerate-api</strong> 키를 입력하면 실시간 환율을 연동합니다.{' '}
+            <a
+              href="https://www.exchangerate-api.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="settings__external-link"
+            >
+              👉 무료 API 키 발급받기 (www.exchangerate-api.com)
+            </a>
           </p>
 
           <form
@@ -42,7 +60,7 @@ export function ApiKeyPanel({ apiKey, envApiKey, onSave }: ApiKeyPanelProps) {
               className="settings__input"
               type="password"
               value={draft}
-              placeholder="exchangerate-api 키 (선택)"
+              placeholder="exchangerate-api 키 입력"
               autoComplete="off"
               spellCheck={false}
               onChange={(event) => setDraft(event.target.value)}
@@ -63,13 +81,30 @@ export function ApiKeyPanel({ apiKey, envApiKey, onSave }: ApiKeyPanelProps) {
           </form>
 
           <p className="settings__status">
-            현재 사용 중:{' '}
-            {effective ? 'exchangerate-api (실시간)' : 'Frankfurter · ECB 기준'}
-            {envApiKey && !apiKey ? ' — .env 기본값 사용 중' : ''}
+            현재 사용 소스:{' '}
+            {effective ? (
+              <a
+                href="https://www.exchangerate-api.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="settings__link"
+              >
+                ExchangeRate-API (실시간 🔗)
+              </a>
+            ) : (
+              <a
+                href="https://www.frankfurter.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="settings__link"
+              >
+                Frankfurter · ECB 기준 (무료 🔗)
+              </a>
+            )}
+            {envApiKey && !apiKey ? ' — .env 기본값' : ''}
           </p>
           <p className="settings__note">
-            키는 이 브라우저의 localStorage에만 저장되며 외부로 전송되지
-            않습니다(exchangerate-api 요청 시에만 사용).
+            입력한 키는 브라우저의 localStorage에만 암호화 저장되며 외부 서버로 전송되지 않습니다.
           </p>
         </div>
       )}
