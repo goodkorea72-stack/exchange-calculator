@@ -4,6 +4,8 @@
 React 18 + TypeScript + Vite 로 만들었고, 환율 조회에 실패해도 **마지막으로 성공한
 환율로 계산이 계속됩니다.**
 
+**[🌐 라이브 데모](https://goodkorea72-stack.github.io/exchange-calculator/)**
+
 ---
 
 ## 기능
